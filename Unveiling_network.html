@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Walkable Southeast Asia</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							
+						
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Unveiling the Pedestrian Network </h1>
+									</header>
+
+									<!-- Content -->
+										
+										<p>Now that we have defined the geographical boundaries of our city using the boundary files, the next step is to extract the pedestrian network within this defined area. This is where the real exploration of walkability begins! </p>
+
+										<h2>Extracting Pedestrian Networks  </h2>
+									<p>The following Python function, <b>extract_pedestrian_network(gdf, PEDESTRIAN_NETWORK_FILE)</b>, performs the key operation. It takes the GeoDataFrame containing the city's boundary (gdf) and a file path to save the resulting pedestrian network <b>(PEDESTRIAN_NETWORK_FILE)</b>. </p>
+										
+<pre>
+	<code>
+# Plot the pedestrian network
+def extract_pedestrian_network(gdf):
+	# Extract the multipolygon geometry from the GeoDataFrame
+	p = gdf['geometry'].iloc[0]
+
+	#  Download and extract pedestrian within the boundaries of the multipolygon using OSMnx
+	G = ox.graph_from_polygon(p, network_type='walk', simplify=True)
+
+	# Plot the pedestrian network using OSMnx's plot function
+	fig, ax = ox.plot_graph(G, edge_linewidth=0.1, node_size=0.1)
+
+	# Uncomment the following line if you want to save the pedestrian network locally in a GeoPackage file
+	#Note the below operation takes very long time to execute
+	# pedestrian_output_path = '/content/pedestrian_network.gpkg'
+	# ox.save_graph_geopackage(G, pedestrian_output_path)
+
+	# Return the pedestrian network graph
+	return G
+
+# Call the function with the GeoDataFrame and the file path for saving the pedestrian network
+G = extract_pedestrian_network(gdf)
+	</code>
+</pre>
+									<p>Let's break down the code:</p>
+									 <p>In this function, we start by extracting the multipolygon geometry from the GeoDataFrame representing the city's boundary.</p> 
+									 <p>Using the <b>osmnx</b> library, we then download and extract the pedestrian network within the specified boundary. </p>
+									 <p>The resulting network graph (G) contains information about walkable pathways and intersections. </p>
+
+
+									<h2>Visualizing the Pedestrian Network </h2>
+									<p>To provide a quick visual overview, we use the ox.plot_graph function to plot the pedestrian network. Adjustments can be made to customize the visualization according to specific preferences. </p>
+									
+									<div style="text-align: center;">
+									<img src="plot_graph.png" alt="">
+									</div>
+
+									<h2>Examining the Pedestrian Network </h2>
+
+									<p>Let's delve into some basic information about the network. This information includes the number of nodes, edges, and key attributes that characterize the walkability features within the city limits. </p>
+									
+									<p>The following Python code snippet provides insights into the characteristics of our pedestrian network: </p>
+									
+									<!-- Preformatted Code -->
+									<pre>
+										<code>
+# Print basic information 
+
+print(f"Number of nodes: {G.number_of_nodes()}") 
+
+print(f"Number of edges: {G.number_of_edges()}") 
+
+print(f"Graph attributes: {G.graph}") # Shows the projection epsg:4326 
+
+# We can even convert the nodes and edges as GeoPandas dataframes to inspect the Attribute tables: 
+
+nodes_gdf = ox.graph_to_gdfs(G, edges=False) 
+
+# Convert edges to a GeoPandas DataFrame 
+
+edges_gdf = ox.graph_to_gdfs(G, nodes=False)
+		</code>
+	</pre>
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="pedestrian_network.html">Extracting Pedestrian Networks: A Boundary-Based Approach</a></li>
+										<li><a href="Unveiling_network.html">Unveiling the Pedestrian Network </a></li>
+										<li><a href="Quantifying_walkability.html">Quantifying Walkability: Measuring Network Length </a></li>
+										<li><a href="Quantifying2_walkability.html">Quantifying Walkability: Assessing Network Density  </a></li>
+										<li><a href="uncovering_intersections.html">Uncovering Intersections: Analyzing Intersection Density</a></li>
+										<li><a href="demographic_insights.html">Demographic Insights and Urban Features</a></li>
+										<li><a href="unveiling_walkability.html">Unveiling Walkability Metrics: Isochrone Analysis</a></li>
+										<li><a href="unveiling_spatial.html">Unveiling Spatial Overlap: Walkability Metrics in Action</a></li>
+										<li><a href="datasets.html">Datasets</a></li>
+										<li><a href="poster.html">UROP Poster</a></li>
+
+									
+									</ul>
+								</nav>
+						</div>
+					</div>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

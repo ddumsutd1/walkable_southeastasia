@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Walkable Southeast Asia</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							
+
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Uncovering Intersections: Analyzing Intersection Density</h1>
+									</header>
+
+									
+
+									<p>In our quest to understand walkability, identifying intersections within the pedestrian network is a key element. This section introduces a function that checks the degree of nodes in the network, providing insights into the density of intersections within the city's boundaries.  </p>
+
+									<h2>Analyzing Intersection Density</h2>
+									<p>The following Python function, <b>find_intersection_density(graph, sq_km_area)</b>, takes the pedestrian network graph (graph) and the area of the city's boundary in square kilometers (sq_km_area) as inputs. Let's break down the code:  </p>
+<pre>
+	<code>
+### The code below will check how many nodes are of degree > 2
+### The degree of a node is the number of edges connected to the node
+def find_intersection_density(graph,sq_km_area):
+	intersection_count = 0
+
+	# Iterate through nodes and check if they are intersections (degree > 2)
+	for node in graph.nodes():
+		if len(list(graph.successors(node))) > 2 or len(list(graph.predecessors(node))) > 2:
+			intersection_count += 1
+
+	print(f"Total number of intersection nodes: {intersection_count}")
+
+	intersection_density = intersection_count / sq_km_area
+	print(f"Total intersection density (number of intersections network per sq. km): {intersection_density}")
+
+	return intersection_density
+	</code>
+</pre>
+
+<pre>
+	<code>
+intersection_density = find_intersection_density(G,gdf_area_square_km)
+</code>
+
+<code>
+Total number of intersection nodes: 133291
+Total intersection density (number of intersections network per sq. km): 200.41294887127754
+</code>
+	
+</pre>
+									
+
+									<h2>Understanding the Function  </h2>
+									<p>
+										<ol>
+											<li><b>Node Degree Check</b>: The function iterates through each node in the network and checks whether the degree (number of connected edges) is greater than 2. Nodes with a degree greater than 2 are considered intersections.</li> 
+											<li><b>Counting Intersections</b>: The total number of intersection nodes is tallied, providing insights into the density of intersections within the city. </li>
+											<li><b>Intersection Density</b>:  The intersection density is then calculated by dividing the total number of intersection nodes by the area of the city's boundary in square kilometers. This metric indicates the number of intersections per square kilometer. </li>
+										</ol>
+									</p>
+									
+									<h2>Implications for Walkability </h2>
+									<p>Assessing intersection density is pivotal for understanding the complexity of pedestrian pathways. Higher intersection density often implies a more interconnected and accessible urban environment.  </p>
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="pedestrian_network.html">Extracting Pedestrian Networks: A Boundary-Based Approach</a></li>
+										<li><a href="Unveiling_network.html">Unveiling the Pedestrian Network </a></li>
+										<li><a href="Quantifying_walkability.html">Quantifying Walkability: Measuring Network Length </a></li>
+										<li><a href="Quantifying2_walkability.html">Quantifying Walkability: Assessing Network Density  </a></li>
+										<li><a href="uncovering_intersections.html">Uncovering Intersections: Analyzing Intersection Density</a></li>
+										<li><a href="demographic_insights.html">Demographic Insights and Urban Features</a></li>
+										<li><a href="unveiling_walkability.html">Unveiling Walkability Metrics: Isochrone Analysis</a></li>
+										<li><a href="unveiling_spatial.html">Unveiling Spatial Overlap: Walkability Metrics in Action</a></li>
+										<li><a href="datasets.html">Datasets</a></li>
+										<li><a href="poster.html">UROP Poster</a></li>
+									</ul>
+								</nav>
+						</div>
+					</div>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

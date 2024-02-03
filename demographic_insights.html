@@ -1,0 +1,278 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Walkable Southeast Asia</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							
+
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Demographic Insights and Urban Features</h1>
+									</header>
+
+									<span class="image main"><img src="Picture3.png" alt="" style="width: 100%;" /></span>
+
+
+                                    <p>In this section, we introduce code snippets that bring population data, building footprints, and elevation contours into the narrative. </p>
+
+									<h2>Analyzing Population Counts </h2>
+
+
+                                    <p>The following code snippet loads population data within the geographical boundary of Jakarta and provides insights into the demographic landscape: </p>
+                                    <p>The column 'DN' contains population counts.</p>
+<pre>
+    <code>
+
+POPULATION_GEOJSON_FILE = 'https://www.dropbox.com/scl/fi/cymqfopbx2df201f00sp8/
+Population_Count_in_Jakarta_Boundary.gpkg?rlkey=ht2ks6o5qkqsm8wvgw9ljxvbe&dl=1'
+# Read the GeoJSON file from the URL
+population_gdf = gpd.read_file(POPULATION_GEOJSON_FILE)
+    </code>
+</pre>
+
+<pre>
+<code>
+print(f"Total columns: {population_gdf.shape[1]}")\
+# Inspect the columns
+population_gdf.head(2)
+</code>
+
+<code>
+    Total columns: 28
+</code>
+</pre>
+                                    <img src="Screenshot.png" alt="" width="990" height="100">
+
+<pre>
+    <code>
+print(f"Descriptive Statistics for Population counts:\n")
+print(population_gdf['DN'].describe())
+print(f"\nMissing Values : {population_gdf['DN'].isna().sum()}")
+    </code>
+
+    <code>
+### output
+Descriptive Statistics for Population counts:
+
+count    41933.00000
+mean       150.25226
+std         35.63868
+min         62.00000
+25%        128.00000
+50%        146.00000
+75%        166.00000
+max        239.00000
+Name: DN, dtype: float64
+
+Missing Values : 0
+    </code>
+</pre>
+
+									
+
+
+<pre>
+    <code>
+#### Plot
+# Create a plot and specify the column for coloring
+population_gdf.plot(column='DN', cmap='viridis', legend=True)
+
+# Add title and labels
+plt.title("Population counts")
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+
+# Show the plot
+plt.show()
+    </code>
+</pre>
+                                    <p>This code generates a map visualizing population counts within the specified geographical boundary, offering a spatial perspective on demographic distribution. </p>
+
+                                    <div style="text-align: center;">
+                                    <img src="population_count.png" alt="">
+                                    </div>
+
+                                    <p>We can restrict the plot's x and y limits to focus on Jakarta City only</p>
+
+<pre>
+    <code>
+def plot_Jakarta_metric(sample_gdf,col_name, title, show_legend):
+# Define the x and y limits
+x_min, x_max = 106.65, 107.0
+y_min, y_max = -6.4, -6.05
+
+# Create a plot and specify the column for coloring
+ax = sample_gdf.plot(column=col_name, legend=show_legend)
+
+# Set x and y limits
+ax.set_xlim(x_min, x_max)
+ax.set_ylim(y_min, y_max)
+
+# Add title and labels
+plt.title(title)
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+
+# Show the plot
+plt.show()
+
+plot_Jakarta_metric(population_gdf,col_name='DN',title='Population counts',show_legend=True)
+    </code>
+</pre>
+                                    <div style="text-align:center">
+                                    <img src="population_jakarta.png" alt="">
+                                    </div>
+                                    <hr class="major" />
+
+                                    <h2>Exploring Building Footprints </h2>
+                                    <p>Next, we bring building footprints into the spotlight, examining their spatial distribution and density: </p>
+<pre>
+    <code>
+import gdown
+
+# Replace 'your_file_id_here' with the actual file ID
+file_id = '1wuOhvtKege_gqql9-Xmnwd59wq2NAyWh'
+
+# Construct the download link
+file_url = 'https://drive.google.com/uc?id=' + file_id
+
+# Specify the destination path where you want to save the file
+output_path = '/content/building-polygon.gpkg'
+
+# Download the file
+gdown.download(file_url, output_path, quiet=False)
+
+# Now, you can read the file using your preferred method
+bldg_gdf = gpd.read_file(output_path)
+print(bldg_gdf.columns)
+print(bldg_gdf.shape)
+bldg_gdf['item'] = 1
+    </code>
+    <code>
+building_gdf =  bldg_gdf.copy()
+building_gdf_projected = building_gdf.to_crs({'init': 'epsg:3857'})
+building_gdf["area"] = building_gdf_projected['geometry'].area/ 10**6
+building_gdf.head(2)
+    </code>
+    </pre>
+                                    <div>
+                                    <img src="building_image.png" alt="" width="995", height="70" >
+                                    </div> 
+
+<pre>
+    <code>
+plot_Jakarta_metric(building_gdf,col_name='item',title='Building Counts',show_legend=False)
+    </code>
+</pre>
+
+                                    <div style="text-align:center">
+                                    <img src="building.png" alt="">
+                                    </div>
+                                    <p>This code snippet loads building footprints, adds a dummy column, and calculates building areas. It sets the stage for understanding the spatial distribution and density of urban structures. </p>
+
+                                    <h3>Elevation Contours </h3>
+
+                                    <p>Lastly, elevation contours provide insights into the terrain of the city. The following function extracts elevation data for Jakarta:  </p>
+<pre>
+    <code>
+import geopandas as gpd
+import pandas as pd
+
+def extract_elevation(city_folder_name):
+    # Read the GPKG file into a GeoDataFrame
+    dropbox_link = "https://www.dropbox.com/scl/fi/h9g2rjc49hbwc3ishf0o5/contour_lines.gpkg?rlkey=pdi83x7l6e3rrfvx8vjoghx98&dl=1"
+    elevation_gdf = gpd.read_file(dropbox_link)
+
+    print(elevation_gdf.head(2))
+
+    # Specify the QML attribute(s) you want as a DataFrame
+    qml_attribute = 'level'
+    df = elevation_gdf[[qml_attribute]]
+
+    # Perform operations on the DataFrame (e.g., df.head() to see the first few rows)
+    #elevation_gdf(df.head())
+
+    return elevation_gdf
+
+elevation_gdf = extract_elevation('Jakarta_all_data')
+print(elevation_gdf.shape)
+elevation_gdf.level.unique(),elevation_gdf.cat.unique()
+        
+    </code>
+    <code>
+plot_Jakarta_metric(elevation_gdf,col_name='level',title='Elevation',show_legend=True)
+    </code>
+</pre>
+                                    <div style="text-align: center;">
+                                    <img src="elevation.png" alt="">
+                                    </div>
+
+                                        <!-- <Inset elevation function here>  -->
+                                        
+                                        
+                                    <p>This function extracts elevation data and provides a glimpse into the topography of Jakarta.</p>
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="pedestrian_network.html">Extracting Pedestrian Networks: A Boundary-Based Approach</a></li>
+										<li><a href="Unveiling_network.html">Unveiling the Pedestrian Network </a></li>
+										<li><a href="Quantifying_walkability.html">Quantifying Walkability: Measuring Network Length </a></li>
+										<li><a href="Quantifying2_walkability.html">Quantifying Walkability: Assessing Network Density  </a></li>
+										<li><a href="uncovering_intersections.html">Uncovering Intersections: Analyzing Intersection Density</a></li>
+										<li><a href="demographic_insights.html">Demographic Insights and Urban Features</a></li>
+										<li><a href="unveiling_walkability.html">Unveiling Walkability Metrics: Isochrone Analysis</a></li>
+										<li><a href="unveiling_spatial.html">Unveiling Spatial Overlap: Walkability Metrics in Action</a></li>
+										<li><a href="datasets.html">Datasets</a></li>
+                                        <li><a href="poster.html">UROP Poster</a></li>
+
+                
+									</ul>
+								</nav>
+						</div>
+					</div>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

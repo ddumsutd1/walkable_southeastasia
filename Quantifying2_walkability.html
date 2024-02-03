@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Walkable Southeast Asia</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							
+
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Quantifying Walkability: Assessing Network Density  </h1>
+									</header>
+
+									
+
+
+									<p>In this section, we introduce a function that calculates both the total area of the defined boundary polygon and the network density. </p>
+
+									<hr class="major" />
+
+									<h2>Calculating Area and Network Density  </h2>
+									<p>The following Python function, <b>get_network_density(hull_temp_gdf, total_length_km)</b>, takes the boundary GeoDataFrame <b>(hull_temp_gdf)</b> and the total length of the pedestrian network in kilometers <b>(total_length_km)</b> as inputs. Let's unravel the code: </p>
+<pre>
+<code>
+# Calculate the area of the boundary polygon in square kmeters
+def get_network_density(hull_temp,total_length_km):
+	hull_temp_gdf = hull_temp.copy()
+	hull_gdf_projected = hull_temp_gdf.to_crs(epsg=32748)  # Reproject to EPSG:32748
+	area_square_meters = hull_gdf_projected.geometry.area.sum()
+	# Convert to square kilometers
+	area_square_km = area_square_meters / 1e6  # 1 square kilometer = 1,000,000 square meters
+	print(f"Total area of my boundary (sq km): {area_square_km}")
+
+	network_density = total_length_km / area_square_km
+	print(f"Total network density (km  of network per sq. km): {network_density}")
+
+	return area_square_km, network_density
+</code>
+<code>
+gdf_area_square_km, gdf_network_density=get_network_density(gdf,G_total_length_km)
+gdf_area_square_km, gdf_network_density=get_network_density(gdf,G_total_length_km)
+</code>
+<code>
+Total area of my boundary (sq km): 665.0817761561453
+Total network density (km  of network per sq. km): 40.87665691146178
+</code>
+</pre>
+
+									
+                                    <h2>Understanding the Function </h2>
+<pre>
+<code>
+<b>Reprojection</b>: The boundary GeoDataFrame is reprojected to EPSG:32748 to ensure accurate area calculations. 
+This step is crucial for maintaining precision when working with geographical data. 
+
+<b>Area Calculation</b>: The total area of the boundary polygon is computed in square meters. 
+
+<b>Conversion</b>: The area is then converted to square kilometers for more intuitive and standardized metrics. 
+
+<b>Network Density</b>: The network density is determined by dividing the total length of the pedestrian network 
+by the area of the boundary polygon. This metric represents the density of walkable pathways per square kilometer. 
+</code></pre>
+
+                                    <h2>Insights into Walkability </h2>
+                        
+									
+
+									<p>Network density provides valuable insights into the concentration of walkable routes within the city's defined limits.  </p>
+
+								
+
+									
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+						
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="pedestrian_network.html">Extracting Pedestrian Networks: A Boundary-Based Approach</a></li>
+										<li><a href="Unveiling_network.html">Unveiling the Pedestrian Network </a></li>
+										<li><a href="Quantifying_walkability.html">Quantifying Walkability: Measuring Network Length </a></li>
+										<li><a href="Quantifying2_walkability.html">Quantifying Walkability: Assessing Network Density  </a></li>
+										<li><a href="uncovering_intersections.html">Uncovering Intersections: Analyzing Intersection Density</a></li>
+										<li><a href="demographic_insights.html">Demographic Insights and Urban Features</a></li>
+										<li><a href="unveiling_walkability.html">Unveiling Walkability Metrics: Isochrone Analysis</a></li>
+										<li><a href="unveiling_spatial.html">Unveiling Spatial Overlap: Walkability Metrics in Action</a></li>
+										<li><a href="datasets.html">Datasets</a></li>
+										<li><a href="poster.html">UROP Poster</a></li>
+									</ul>
+								</nav>
+						</div>
+					</div>
+
+                    
+			</div>
+
+            <!-- Preformatted Code -->
+           
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

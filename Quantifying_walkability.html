@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Walkable Southeast Asia</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							
+						
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Quantifying Walkability: Measuring Network Length  </h1>
+									</header>
+
+									<!-- Content -->
+										
+										<p>One of the fundamental aspects of walkability is the physical length of pedestrian pathways within a city. In this section, we introduce a function that calculates and quantifies the total length of the pedestrian network in kilometers. </p>
+
+										<h2>Measuring Network Length   </h2>
+									<p>The following Python function, <b>get_network_length_km(graph)</b>, takes the extracted pedestrian network graph (graph) as input and computes the total length of network edges in kilometers. Let's break down the code:  </p>
+<pre>
+    <code>
+# Compute the total length of network edges in kmeters
+
+def get_network_length_km(graph):
+    # Initialize variables to store total length
+    total_length_meters = 0.0
+
+    # Calculate the total length of network edges in meters
+    for u, v, data in graph.edges(data=True):
+        if 'length' in data:  # Check if 'length' attribute exists
+            total_length_meters += data['length']
+    # Convert to kilometers
+    total_length_km = total_length_meters / 1000
+
+    # Print the total length in kilometers
+    print(f"Total length of network edges (km): {total_length_km}")
+    return total_length_km
+        
+    </code>
+    <code>
+G_total_length_km=get_network_length_km(G)
+    </code>
+    <code>
+Total length of network edges (km): 27186.319582000375
+    </code>
+</pre>
+										
+
+								
+
+									<h2>Understanding the Function  </h2>
+									
+									
+									
+									<!-- Preformatted Code -->
+									<pre>
+										<code>
+1. <b>Initialization</b>: The function starts by initializing a variable (total_length_meters) 
+to store the cumulative length of all network edges. 
+
+2. <b>Calculating Length</b>: It then iterates through each edge in the network, checking if the 'length' attribute exists 
+in the edge data. If so, it adds the length to the total. 
+
+3. <b>Conversion</b>: The total length is initially measured in meters and is then converted to kilometers. 
+
+4. <b>Print and Return</b>: Finally, the function prints the total length in kilometers 
+and returns this value for further analysis. 
+		</code>
+	</pre>	
+										
+                                    <h2> Application in Walkability Analysis   </h2>
+                                    <p> Measuring the network length is a critical step in understanding the extent of walkable pathways within the city. </p>
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+					
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="pedestrian_network.html">Extracting Pedestrian Networks: A Boundary-Based Approach</a></li>
+										<li><a href="Unveiling_network.html">Unveiling the Pedestrian Network </a></li>
+										<li><a href="Quantifying_walkability.html">Quantifying Walkability: Measuring Network Length </a></li>
+										<li><a href="Quantifying2_walkability.html">Quantifying Walkability: Assessing Network Density  </a></li>
+										<li><a href="uncovering_intersections.html">Uncovering Intersections: Analyzing Intersection Density</a></li>
+										<li><a href="demographic_insights.html">Demographic Insights and Urban Features</a></li>
+										<li><a href="unveiling_walkability.html">Unveiling Walkability Metrics: Isochrone Analysis</a></li>
+										<li><a href="unveiling_spatial.html">Unveiling Spatial Overlap: Walkability Metrics in Action</a></li>
+										<li><a href="datasets.html">Datasets</a></li>
+										<li><a href="poster.html">UROP Poster</a></li>
+									</ul>
+								</nav>
+						</div>
+					</div>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Walkable Southeast Asia</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							
+
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Unveiling Walkability Metrics: Isochrone Analysis </h1>
+
+									</header>
+
+									<div align="center">
+										<span class="image main"><img src="Picture4.png" alt="" style="width: 40%; height: 640px;"/></span>
+
+									</div>
+									
+
+                                    <p>The first step involves constructing an isochrone graph centered around a point of interest (POI) with latitude and longitude coordinates over our pedestrian network. The isochrone is created based on a specified walking distance (500 meters in this example) from the POI:  </p>
+<pre>
+    <code>
+from geopy.distance import geodesic
+
+# Provide a point of interest with lat/lon coordinates
+poi = (-6.153536, 106.726189)
+
+# Compute the walking isochrone based on distance (500 meters in this example)
+def compute_isochrone_for_poi(graph, poi, distance):
+    isochrone = nx.MultiDiGraph()
+    reachable_nodes = set()
+
+    for node in graph.nodes(data=True):
+        node_coords = (node[1]['y'], node[1]['x'])
+        if geodesic(poi, node_coords).meters <= distance:
+            reachable_nodes.add(node[0])
+            # Add nodes to the isochrone
+            isochrone.add_node(node[0], **node[1])
+
+    for u, v, key, data in graph.edges(keys=True, data=True):
+        if u in reachable_nodes and v in reachable_nodes:
+            # Add edges to the isochrone
+            isochrone.add_edge(u, v, key=key, **data)
+
+    # Set the CRS for the isochrone (same as G2)
+    isochrone.graph["crs"] = graph.graph["crs"]
+
+    return isochrone
+
+isochrone = compute_isochrone_for_poi(G2, poi, distance=500)
+    </code>
+</pre>
+									
+                                   
+
+                                 
+
+                                    <p> This function reads the pedestrian network data and constructs an isochrone graph, laying the foundation for subsequent walkability analyses.  </p>									
+                                    
+
+                                    <h2>Generating Convex Hull for Isochrone  </h2>
+
+                                    <p>We take a step further by defining the spatial extent of the isochrone through a convex hull analysis. This analysis creates a convex polygon encompassing the walkable area, offering a clearer visual representation.  </p>
+
+
+                                    <p>The following code snippet defines a function, <b>generate_convex_hull_for_isochrone(isochrone)</b>, which computes the convex hull for the coordinates of nodes within the isochrone: </p>
+
+<pre>
+    <code>
+from scipy.spatial import ConvexHull
+from shapely.geometry import Polygon
+
+def generate_convex_hull_for_iscochrone(isochrone):
+    # Create a list to store the coordinates of nodes in the isochrone
+    node_coords = []
+
+    for node, data in isochrone.nodes(data=True):
+        node_coords.append((data['x'], data['y']))
+
+    # Compute the convex hull of the node coordinates
+    hull = ConvexHull(node_coords)
+
+    # Extract the convex hull vertices
+    hull_vertices = [node_coords[i] for i in hull.vertices]
+
+    # Create a Polygon from the convex hull vertices
+    convex_hull_polygon = Polygon(hull_vertices)
+
+    # Create a GeoDataFrame with the convex hull polygon
+    hull_gdf = gpd.GeoDataFrame({'geometry': [convex_hull_polygon]}, crs=isochrone.graph["crs"])
+
+    return hull_gdf
+
+# Now you have a GeoDataFrame 'hull_gdf' containing the solid convex hull polygon
+hull_gdf =  generate_convex_hull_for_iscochrone(isochrone)
+    </code>
+    <code>
+def plot_hull_for_iscochrone(hull_gdf):
+#### Plot
+# Create a basic plot
+hull_gdf.plot()
+# Add title and labels
+plt.title("Your isochrone")
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+# Show the plot
+plt.show()
+hull_gdf.columns
+
+plot_hull_for_iscochrone(hull_gdf)
+    </code>
+</pre>
+                                    <div style="text-align:center;">
+                                    <img src="isochrone.png" alt="">
+                                    </div>
+                                    <p>This function utilizes the <b>scipy.spatial.ConvexHull</b> algorithm to compute the convex hull of node coordinates within the isochrone. The resulting convex hull polygon is then encapsulated in a GeoDataFrame, <b>hull_gdf</b>, for further analysis.</p>
+
+									
+									
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<h2>Menu</h2>
+									</header>
+									<ul>
+										<li><a href="index.html">Homepage</a></li>
+										<li><a href="pedestrian_network.html">Extracting Pedestrian Networks: A Boundary-Based Approach</a></li>
+										<li><a href="Unveiling_network.html">Unveiling the Pedestrian Network </a></li>
+										<li><a href="Quantifying_walkability.html">Quantifying Walkability: Measuring Network Length </a></li>
+										<li><a href="Quantifying2_walkability.html">Quantifying Walkability: Assessing Network Density  </a></li>
+										<li><a href="uncovering_intersections.html">Uncovering Intersections: Analyzing Intersection Density</a></li>
+										<li><a href="demographic_insights.html">Demographic Insights and Urban Features</a></li>
+										<li><a href="unveiling_walkability.html">Unveiling Walkability Metrics: Isochrone Analysis</a></li>
+										<li><a href="unveiling_spatial.html">Unveiling Spatial Overlap: Walkability Metrics in Action</a></li>
+										<li><a href="datasets.html">Datasets</a></li>
+										<li><a href="poster.html">UROP Poster</a></li>
+									</ul>
+								</nav>
+						</div>
+					</div>
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
